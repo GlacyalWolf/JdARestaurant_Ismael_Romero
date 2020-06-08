@@ -25,4 +25,12 @@
         android:name="com.example.jdarestaurant_mvvm.ui.ver_reservas.ListaReservasFragment"
         android:label="Lista Reservas"
         tools:layout="@layout/fragment_vista_reserva" />
+    <fragment
+        android:id="@+id/nuevaReservaFragment"
+        android:name="com.example.jdarestaurant_mvvm.ui.nueva_reserva.NuevaReservaFragment"
+        android:label="NuevaReservaFragment" />
+    <fragment
+        android:id="@+id/detalleReserva"
+        android:name="com.example.jdarestaurant_mvvm.ui.ver_reservas.DetalleReserva"
+        android:label="DetalleReserva" />
 </navigation>

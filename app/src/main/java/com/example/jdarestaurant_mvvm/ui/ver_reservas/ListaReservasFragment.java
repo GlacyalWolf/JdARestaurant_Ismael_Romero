@@ -1,9 +1,11 @@
 package com.example.jdarestaurant_mvvm.ui.ver_reservas;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,15 +30,16 @@ public class ListaReservasFragment extends Fragment {
     RecyclerView reservas_recycler;
     List<Reserva> reservas = new ArrayList<>();
     ReservaAdapter reservaAdapter;
+    Button nuevareserva;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         verReservasViewModel =
-                ViewModelProviders.of(this).get(VerReservasViewModel.class);
+                ViewModelProviders.of(requireActivity()).get(VerReservasViewModel.class);
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_vista_reserva, container, false);
-
+        nuevareserva= view.findViewById(R.id.bNewReserva);
 
         reservas_recycler = view.findViewById(R.id.reservas_Recycler);
         reservas_recycler.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -43,6 +47,30 @@ public class ListaReservasFragment extends Fragment {
         reservas_recycler.setAdapter(reservaAdapter);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
         reservas_recycler.addItemDecoration(dividerItemDecoration);
+
+
+        verReservasViewModel.getReservas(getContext());
+
+        verReservasViewModel.getlivereserva().observe(getViewLifecycleOwner(), new Observer<ArrayList<Reserva>>() {
+            @Override
+            public void onChanged(ArrayList<Reserva> reservas) {
+               reservaAdapter.setReservaList(reservas);
+               reservaAdapter.notifyDataSetChanged();
+            }
+        });
+
+
+
+
+
+
+        nuevareserva.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.nuevaReservaFragment);
+            }
+        });
+
 
         return view;
     }
@@ -61,6 +89,9 @@ public class ListaReservasFragment extends Fragment {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("POSICION",getAdapterPosition());
+                    Navigation.findNavController(v).navigate(R.id.detalleReserva,bundle);
 
                 }
             });
@@ -75,6 +106,9 @@ public class ListaReservasFragment extends Fragment {
         public ReservaAdapter(List<Reserva> reservaList) {
             this.reservaList = reservaList;
         }
+        public void setReservaList(ArrayList<Reserva> listar){
+            this.reservaList=listar;
+        }
 
         @NonNull
         @Override
@@ -86,15 +120,17 @@ public class ListaReservasFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull ReservaViewHolder reservaViewHolder, int i) {
+            String fecha=reservaList.get(i).getFecha().toString();
+            String personas=String.valueOf(reservaList.get(i).getPersonas());
 
-            reservaViewHolder.fecha.setText("0");
-            reservaViewHolder.personas.setText("0");
+            reservaViewHolder.fecha.setText(fecha);
+            reservaViewHolder.personas.setText(personas);
 
         }
 
         @Override
         public int getItemCount() {
-            return 0;
+            return reservaList.size();
         }
     }
 

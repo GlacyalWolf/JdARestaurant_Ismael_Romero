@@ -1,11 +1,28 @@
 package com.example.jdarestaurant_mvvm.Model;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "reserva")
 public class Reserva {
 
+    @PrimaryKey(autoGenerate = true)
+    @NonNull
+    @ColumnInfo
+    private int uid;
+
+
+    @ColumnInfo(name="fecha")
     private String fecha;
+    @ColumnInfo(name="personas")
     private int personas;
+    @ColumnInfo(name="comentarios")
     private String comentarios;
+    @ColumnInfo(name="nombre")
     private String nombre;
+    @ColumnInfo(name="telefono")
     private String telefono;
 
     public Reserva() {
@@ -57,5 +74,13 @@ public class Reserva {
 
     public void setComentarios(String comentarios) {
         this.comentarios = comentarios;
+    }
+
+    public int getUid() {
+        return uid;
+    }
+
+    public void setUid(int uid) {
+        this.uid = uid;
     }
 }

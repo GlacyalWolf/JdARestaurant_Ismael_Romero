@@ -44,6 +44,10 @@ public class CartaFragment extends Fragment {
         platosAdapter = new PlatosAdapter(platoList);
         platosRecycler.setAdapter(platosAdapter);
 
+        cartaViewModel.getPlatos();
+
+
+
 
 
         return view;
